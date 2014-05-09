@@ -18,7 +18,7 @@ defmodule Mix.Tasks.Docs.Ghpages do
     # First figure out the git remote to use based on the
     # git remote here.
     git_remote = Keyword.get(
-        Regex.captures(%r/\: (?<git>.*)/g,
+        Regex.captures(~r/\: (?<git>.*)/,
             :os.cmd 'git remote show -n origin | grep "Push  URL"'), :git)
     Mix.shell.info "Git remote #{git_remote}"
     File.cd! "docs"
