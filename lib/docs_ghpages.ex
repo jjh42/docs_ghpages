@@ -13,15 +13,16 @@ defmodule Mix.Tasks.Docs.Ghpages do
   end
 
   def run(_) do
-    File.rm_rf "docs"
+    File.rm_rf "doc"
     Mix.Task.run "docs"
     # First figure out the git remote to use based on the
     # git remote here.
-    git_remote = Keyword.get(
-        Regex.captures(~r/\: (?<git>.*)/,
-            :os.cmd 'git remote show -n origin | grep "Push  URL"'), :git)
+    git_remote = Map.get(
+        Regex.named_captures(~r/\: (?<git>.*)/,
+            to_string(:os.cmd 'git remote show -n origin | grep "Push  URL"')),
+            "git")
     Mix.shell.info "Git remote #{git_remote}"
-    File.cd! "docs"
+    File.cd! "doc"
     run! "git init ."
     run! "git add ."
     run! "git commit -a -m \"Generated docs\""
@@ -29,4 +30,3 @@ defmodule Mix.Tasks.Docs.Ghpages do
     run! "git push origin master:gh-pages --force"
   end
 end
-
